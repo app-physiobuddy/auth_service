@@ -1,0 +1,35 @@
+services:
+  node_auth_server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: node_auth_compose
+    working_dir: /app                       # Set the working directory inside the container
+    ports:
+      - "3000:3000"                         # Expose port 3000 to your local machine
+           # The start command for your app
+    environment:
+      NODE_ENV: development                 # Set environment variable
+    depends_on:
+      - db                                  # Ensure DB is started first
+    volumes:
+      - /Users/ricardo/Developer/docker/node_auth_js:/app                 # Persistent volume for Node.js (empty or for logs)
+    command: ["npm", "run", "dev"]
+    restart: on-failure
+
+  db:
+    image: pg_auth_image:v1
+    container_name: pg_auth_compose
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: auth
+    volumes:
+      - postgres_auth:/var/lib/postgresql/data  # Persistent volume for DB data
+    ports:
+      - "5432:5432"                        # Expose PostgreSQL port
+
+
+volumes:
+  postgres_auth:  # Volume for PostgreSQL data
+  node_auth:      # Volume for Node.js (empty or log data)
