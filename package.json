@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "src/app.js",
   "scripts": {
-    "test": "jest --config tests/jest.config.js",
+    "test": "jest --config tests/jest.unit.config.js",
     "test:unit": "jest --config tests/jest.unit.config.js",
     "test:integration": "jest --config jest.integration.config.js",
     "test:e2e": "jest --config jest.e2e.config.js",
