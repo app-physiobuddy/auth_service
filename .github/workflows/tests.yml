@@ -1,30 +1,30 @@
-name: Test Node.js API
-
 on:
   push:
-    branches:
-      - main
+    branches: [ main ] # Trigger the workflow on every commit to the main branch.
   pull_request:
-    branches:
-      - main  # Run tests when a pull request targets the main branch
+    branches: [ main ] # Trigger the workflow on pull requests targeting the main branch.
 
 jobs:
-  test:
+  build:
+
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        node-version: [22, 23]  # Define multiple Node.js versions to test
+        node-version: [22.x, 23.x] # Define a matrix of Node.js versions to test.There would be 3 jobs for 12.x, 14.x, 16.x
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2 # Step 1: Check out the source code from the repository.
 
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm' # Step 2: Use npm caching for faster dependency installs.
 
-      - name: Install dependencies
-        run: npm install
+    - name: Install Node.js dependencies
+      run: npm ci # Step 3: Perform a clean install of Node.js dependencies.
 
-      - name: Run tests
-        run: npm test
+    - name: Run tests
+      run: npm test # Step 4: Run tests using the specified Node.js version.
