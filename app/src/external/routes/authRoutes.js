@@ -5,7 +5,6 @@ const logger = require("../providers/LogProvider");
 
 // To catch sync and async errors
 const asyncHandler = (controller) => (req, res, next) => {
-  console.log("asyncHandler");
   Promise.resolve(controller(req, res, next)).catch(next);
 }
 

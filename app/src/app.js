@@ -1,4 +1,5 @@
 const PostgresDatabase = require("./external/config/dbconfig")
+require('dotenv').config();
 
 // Auth Dependiencies
 const AuthRepositoryPostgres = require("./external/repositories/postgresAuthRepositories")
