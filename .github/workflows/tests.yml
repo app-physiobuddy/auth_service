@@ -12,26 +12,36 @@ jobs:
       matrix:
         node-version: [22.x, 23.x]
 
-    defaults:
-      run:
-        working-directory: ./app  # Set default working directory for all run steps
+#    defaults:
+ #     run:
+  #      working-directory: ./app  # Set default working directory for all run steps
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-      with:
-        path: './app'
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: app/package-lock.json  # Point to lock file in app directory
 
+    # Step 3: Navigate to the app directory
+    - name: Change to app directory
+      run: cd app
 
-    - name: Install Node.js dependencies
+    #- name: Install Node.js dependencies
+     # run: npm ci
+
+    #- name: Run tests
+     # run: npm test
+
+    # Step 4: Install dependencies
+    - name: Install dependencies
       run: npm ci
+      working-directory: app
 
+      # Step 5: Run tests
     - name: Run tests
       run: npm test
+      working-directory: app
