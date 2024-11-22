@@ -19,7 +19,8 @@ class AuthController {
         const result = await this.authUseCases.loginUser(email, password);
 
         return res.status(200).json(
-          {sucess: true,
+          {
+            sucess: true,
             message: "User logged in successfully",
             token: result.token
           }
@@ -50,7 +51,8 @@ class AuthController {
           const result = await this.authUseCases.register(newUser);
 
           return res.status(201).json(
-          {sucess: result,
+          {
+            sucess: result,
             message: "User registered successfully"
           }
           );
@@ -86,7 +88,8 @@ class AuthController {
         const result = await this.authUseCases.changePassword(token, oldPassword, newPassword);
 
         return res.status(200).json(
-          {sucess: result,
+          {
+            sucess: result,
             message: "Password changed successfully"
           }
         );
