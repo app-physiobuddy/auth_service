@@ -1,6 +1,6 @@
 const register = require("../../../src/use-cases/auth-use-cases/register")
 const {User} = require("../../../src/entities/User")
-const ErrorTypes = require("../../../src/utilities/errors/errorTypes")
+
 
 const mockUserRepository = require('../mocks/userRepositoryMock')
 const authServiceMock = require('../mocks/authServiceMock')
