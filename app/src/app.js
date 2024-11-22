@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 // Auth Dependiencies
-const AuthRepositoryPostgres = require("./framework/repositories/postgresAuthRepositories")
+const AuthRepositoryPostgres = require("./framework/repositories/AuthRepositoryPostgres")
 const AuthUseCases = require("./use-cases/auth-use-cases")
 const AuthController = require("./adapters/AuthController")
 const AuthProvider = require("./framework/providers/AuthProvider")
