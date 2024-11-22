@@ -1,37 +1,34 @@
+name: Node.js Tests
+
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [22.x, 23.x]
-
-    defaults:
-      run:
-        working-directory: ./app  # Set default working directory for all run steps
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        path: './app'
+      # Step 1: Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: app/package-lock.json  # Point to lock file in app directory
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x' # Replace with your Node.js version
 
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+        working-directory: app # Set the working directory to 'app/'
 
-    - name: Install Node.js dependencies
-      run: npm ci
-
-    - name: Run tests
-      run: npm test
+      # Step 4: Run tests
+      - name: Run tests
+        run: npm test
+        working-directory: app # Set the working directory to 'app/'
