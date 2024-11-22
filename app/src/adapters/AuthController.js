@@ -1,4 +1,4 @@
-const ErrorTypes = require("../../utilities/errors/ErrorTypes");
+const ErrorTypes = require("../utilities/errors/ErrorTypes");
 
 
 class AuthController {

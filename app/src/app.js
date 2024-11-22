@@ -1,19 +1,17 @@
 require('dotenv').config();
 
 // Auth Dependiencies
-const PostgresDatabase = require("./external/config/dbconfig")
-const AuthRepositoryPostgres = require("./external/repositories/postgresAuthRepositories")
+const AuthRepositoryPostgres = require("./framework/repositories/postgresAuthRepositories")
 const AuthUseCases = require("./use-cases/auth-use-cases")
-const AuthController = require("./adapters/controllers/AuthController")
-const AuthProvider = require("./external/providers/AuthProvider")
+const AuthController = require("./adapters/AuthController")
+const AuthProvider = require("./framework/providers/AuthProvider")
 
 
 
 // Auth Dep Injection
-const database = new PostgresDatabase();
 const authProvider = new AuthProvider();
 authProvider.initialize();
-const authRepository = new AuthRepositoryPostgres(database);
+const authRepository = new AuthRepositoryPostgres();
 const authUseCases = new AuthUseCases(authRepository, authProvider);
 const authController = new AuthController(authUseCases);
 
@@ -21,7 +19,7 @@ const authController = new AuthController(authUseCases);
 
 
 const express = require('express');
-const authRoutes = require('./external/routes/authRoutes');
+const authRoutes = require('./framework/routes/authRoutes');
 const erroHandler = require("./utilities/errors/errorHandler")
 const app = express();
 
