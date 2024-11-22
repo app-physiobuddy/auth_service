@@ -1,5 +1,5 @@
 const {User} = require("../../entities/User")
-const ErrorTypes = require("../../utilities/errors/errorTypes")
+const ErrorTypes = require("../../utilities/errors/ErrorTypes")
 
 const changePasswordUseCase = ( authRepository, authService ) => {
     return async (token_, oldPassword_raw, newPassword_raw) => {

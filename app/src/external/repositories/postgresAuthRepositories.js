@@ -1,7 +1,7 @@
 
 const enforceContract = require("../../utilities/enforceContract");
 const AuthGateway = require("../../adapters/gateways/AuthGateway");
-const ErrorTypes = require("../../utilities/errors/errorTypes");
+const ErrorTypes = require("../../utilities/errors/ErrorTypes");
 
   class AuthRepositoryPostgres extends AuthGateway  {
     constructor(database) {
