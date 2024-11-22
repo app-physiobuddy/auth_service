@@ -2,7 +2,6 @@
 const enforceContract = require("../../utilities/enforceContract");
 const AuthGateway = require("../../adapters/AuthGateway");
 const ErrorTypes = require("../../utilities/errors/ErrorTypes");
-
 const { Pool } = require('pg');
 require('dotenv').config();
 
@@ -38,6 +37,9 @@ const database = new PostgresDatabase();
 
     }
     async save(User, salt) {
+      if (!this.database) {
+        throw ErrorTypes.DatabaseError('DB connection is not initialized');
+      }
       const result = await this.database.query(
           'INSERT INTO users (email, name, password, role, salt) VALUES ($1, $2, $3, $4, $5)',
           [User.email, User.name, User.password, User.role, salt]
@@ -49,6 +51,9 @@ const database = new PostgresDatabase();
     }
 
     async updatePassword(User, salt) {
+      if (!this.database) {
+        throw ErrorTypes.DatabaseError('DB connection is not initialized');
+      }
       const result = await this.database.query(
         'UPDATE users SET password = $1, salt = $3 WHERE email = $2',
         [User.password, User.email, salt]
@@ -60,6 +65,9 @@ const database = new PostgresDatabase();
     }
 
     async updateUserName(User) {
+      if (!this.database) {
+        throw ErrorTypes.DatabaseError('DB connection is not initialized');
+      }
       const result = await this.database.query(
         'UPDATE users SET name = $1 WHERE email = $2',
         [User.name, User.email]
@@ -83,8 +91,10 @@ const database = new PostgresDatabase();
     }
 
     async readAll() {
+      if (!this.database) {
+        throw ErrorTypes.DatabaseError('DB connection is not initialized');
+      }
       const result =  await this.database.query('SELECT * FROM users');
-    
       if (result.rowCount === 0) {
         throw ErrorTypes.NotFoundError('No users found');
       }

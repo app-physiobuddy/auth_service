@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-// Auth Dependiencies
+// Auth Dependencies
 const AuthRepositoryPostgres = require("./framework/repositories/AuthRepositoryPostgres")
 const AuthUseCases = require("./use-cases/auth-use-cases")
 const AuthController = require("./adapters/AuthController")
@@ -24,7 +24,6 @@ const erroHandler = require("./utilities/errors/errorHandler")
 const app = express();
 
 
-const PORT = process.env.PORT || 3000;
 
 // Middleware and other setup
 app.use(express.json());
@@ -38,6 +37,7 @@ app.use('/auth', authRoutes(authController));
 app.use(erroHandler);
 
 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

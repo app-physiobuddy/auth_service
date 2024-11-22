@@ -11,7 +11,7 @@ const loginUseCase = (authRepository, authService) => {
       if (!_result_user) {
         throw ErrorTypes.UnauthorizedAcess('User not found in db');
       }
-/////
+      
       const user = new User(_result_user.email, _result_user.name, _result_user.password, _result_user.role)
       const userSalt = _result_user.salt
 
