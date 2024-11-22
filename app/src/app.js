@@ -1,30 +1,21 @@
-const PostgresDatabase = require("./external/config/dbconfig")
 require('dotenv').config();
 
 // Auth Dependiencies
+const PostgresDatabase = require("./external/config/dbconfig")
 const AuthRepositoryPostgres = require("./external/repositories/postgresAuthRepositories")
-//const AuthPresenter = require("../adapters/presenters")
 const AuthUseCases = require("./use-cases/auth-use-cases")
 const AuthController = require("./adapters/controllers/AuthController")
 const AuthProvider = require("./external/providers/AuthProvider")
 
-const database = new PostgresDatabase();
-
-function fakePresenter() {
-  return function (arg) {
-      return arg;
-  }
-}
-
 
 
 // Auth Dep Injection
+const database = new PostgresDatabase();
 const authProvider = new AuthProvider();
 authProvider.initialize();
 const authRepository = new AuthRepositoryPostgres(database);
 const authUseCases = new AuthUseCases(authRepository, authProvider);
-const authPresenter = fakePresenter();
-const authController = new AuthController(authUseCases, authPresenter);
+const authController = new AuthController(authUseCases);
 
 
 

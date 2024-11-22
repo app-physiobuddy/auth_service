@@ -60,6 +60,7 @@ const ErrorTypes = require("../../utilities/errors/ErrorTypes");
 
     async readAll() {
       const result =  await this.database.query('SELECT * FROM users');
+    
       if (result.rowCount === 0) {
         throw ErrorTypes.NotFoundError('No users found');
       }

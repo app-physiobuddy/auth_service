@@ -1,10 +1,9 @@
-const ErrorTypes = require("../../utilities/errors/errorTypes");
+const ErrorTypes = require("../../utilities/errors/ErrorTypes");
 
 
 class AuthController {
-    constructor(authUseCases, authPresenter) {
+    constructor(authUseCases) {
       this.authUseCases = authUseCases;
-      this.authPresenter = authPresenter;
     }
   
     async login(req, res) {
@@ -53,10 +52,16 @@ class AuthController {
       }
     
       async getAll(req, res) {
-        const userEntities = await this.userUseCases.getAll()
-        const presentedData = this.userPresenter.present(userEntities);
 
-        res.json(presentedData);
+        const userEntities = await this.authUseCases.getAll()
+
+        //To present data
+        let makeMessage = userEntities.map(element => `User '${element.name}'`).join(" // ");
+        let message = `We have ${userEntities.length} users registered in the app: ${makeMessage}`;
+
+        return res.status(200).json(
+          message
+        );
       }
 
       async changePassword(req, res) {
