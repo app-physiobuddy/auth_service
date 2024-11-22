@@ -18,13 +18,9 @@ jobs:
 
     steps:
     - name: Checkout code
-<<<<<<< HEAD
       uses: actions/checkout@v2
-=======
-      uses: actions/checkout@v2 # Step 1: Check out the source code from the repository.
       with:
         path: './app'
->>>>>>> a15012721ee2dc63de9cad3ffe8ce24b79381ccf
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
@@ -35,16 +31,7 @@ jobs:
 
 
     - name: Install Node.js dependencies
-<<<<<<< HEAD
       run: npm ci
 
     - name: Run tests
       run: npm test
-=======
-      run: npm ci # Step 3: Perform a clean install of Node.js dependencies.
-
-
-    - name: Run tests
-      run: npm test # Step 4: Run tests using the specified Node.js version.
-
->>>>>>> a15012721ee2dc63de9cad3ffe8ce24b79381ccf
