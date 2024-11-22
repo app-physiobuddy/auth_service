@@ -1,29 +1,27 @@
 services:
-  node_auth_server:
+  physiobuddy_authservice:
     build:
-      context: ./
+      context: ./app
       dockerfile: Dockerfile
-    container_name: node_auth_compose
+    container_name: physio_buddy_authserver
     working_dir: /app                       # Set the working directory inside the container
     ports:
       - "3000:3000"                         # Expose port 3000 to your local machine
            # The start command for your app
-    environment:
-      NODE_ENV: development                 # Set environment variable
     depends_on:
       - db                                  # Ensure DB is started first
-    volumes:
-      - /Users/ricardo/Developer/docker/node_auth_js:/app                 # Persistent volume for Node.js (empty or for logs)
+    volumes:                         # First you do git pull, then on running docker-compose up --build:
+      - ./app:/app                 # this overwrites the content of ./app folder to the container
+      - /app/node_modules           #this excludes the node_modules folder from overwriting the one inside the container
     command: ["npm", "run", "dev"]
+
     restart: on-failure
 
   db:
-    image: pg_auth_image:v1
-    container_name: pg_auth_compose
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: auth
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: physio_buddy_db
     volumes:
       - postgres_auth:/var/lib/postgresql/data  # Persistent volume for DB data
     ports:
@@ -32,4 +30,3 @@ services:
 
 volumes:
   postgres_auth:  # Volume for PostgreSQL data
-  node_auth:      # Volume for Node.js (empty or log data)

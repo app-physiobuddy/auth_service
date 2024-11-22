@@ -19,8 +19,8 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/node-api:${{ github.event.release.tag_name }} .
+        run: |                                                                                          #Added this
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/node-api:${{ github.event.release.tag_name }} ./app
           docker tag ${{ secrets.DOCKER_USERNAME }}/node-api:${{ github.event.release.tag_name }} ${{ secrets.DOCKER_USERNAME }}/node-api:latest
 
       - name: Push Docker image
