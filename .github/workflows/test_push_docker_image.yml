@@ -1,17 +1,19 @@
 name: Test - Build and Push Docker Images
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  #push:
+  #  branches: [ "main" ]
+  #pull_request:
+  #  branches: [ "main" ]
+  release:
+    types: [published]  # Trigger when a release is published
 
 env:
   APP_IMAGE_NAME: physiobuddy2024/physio_buddy_authserver
   DB_IMAGE_NAME: physiobuddy2024/physio_buddy_db
 
 jobs:
-  build-and-push:
+  build-and-push-docker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -26,9 +28,9 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Create .env file
-        run: |
-          echo "${{ secrets.APP_ENV }}" > app/.env
+      #- name: Create .env file
+      #  run: |
+      #    echo "${{ secrets.APP_ENV }}" > app/.env
 
       # Build and push app image
       - name: Build and push app image
