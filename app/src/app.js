@@ -15,7 +15,14 @@ const authRepository = new AuthRepositoryPostgres();
 const authUseCases = new AuthUseCases(authRepository, authProvider);
 const authController = new AuthController(authUseCases);
 
-
+console.log(
+  process.env.DB_HOST,
+  process.env.DB_PORT,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  process.env.DB_DATABASE,
+  process.env.APP_PORT
+)
 
 
 const express = require('express');
