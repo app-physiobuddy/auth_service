@@ -36,7 +36,9 @@ const app = express();
 app.use(express.json());
 
 
-
+app.route('/').get((req, res) => {
+  res.send("Olá, somos o grupo 2");
+})
 // Mount the routes
 app.use('/auth', authRoutes(authController));
 
@@ -44,7 +46,7 @@ app.use('/auth', authRoutes(authController));
 app.use(erroHandler);
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.APP_PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
