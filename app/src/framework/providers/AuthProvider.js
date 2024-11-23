@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const {V4} = require('paseto');
-const ErrorTypes = require('../../utilities/errors/errorTypes');
+const ErrorTypes = require('../../utilities/errors/ErrorTypes');
 
 class AuthProvider {
     constructor(pasetoKey) {
