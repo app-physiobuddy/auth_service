@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-server-deployment
+  labels:
+    app: auth-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: auth-server
+  template:
+    metadata:
+      labels:
+        app: auth-server
+    spec:
+      containers:
+        - name: auth-server
+          image: physiobuddy2024/physio_buddy_authserver:latest
+          imagePullPolicy: Always
+          env:
+            - name: DB_HOST
+              value: postgresql-service
+            - name: DB_PORT
+              value: "5432"  # Specify a database name
+            - name: DB_USER
+              value: "postgres"      # Specify a username for the DB
+            - name: DB_PASSWORD
+              value: "postgres" # Specify a password for the DB
+            - name: DB_DATABASE
+              value: "auth"   # Specify a database name
+            - name: APP_PORT
+              value: "3000"   # Specify a database name
+            
+          ports:
+            - containerPort: 3000
+          # resources:
+          #   limits:
+          #     cpu : 500m
+          #   requests:
+          #     cpu : 200m
+          resources:
+            limits:
+              cpu: "1"
+            requests:
+              cpu: 100m

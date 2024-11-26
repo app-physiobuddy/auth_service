@@ -1,6 +1,5 @@
 # AuthService
 Microservice for authentication
-alterar
 
 ## Iniciar o serviço para desenvolvimento
 Depois de fazer git clone, criar um docker-compose com:
@@ -15,3 +14,14 @@ Todo o que escreverem é automagicamente passado para o container.
 
 A base de dados é iniciada automaticamente com uma table users (caso nao exista) e cria um volume gerido pelo docker;
 A BD persiste localmente, se quiserem reiniciar a BD é só apagar o volume do docker.
+
+## Actions
+Estão definidas duas actions:
+1. Testes: no pull e push
+2. Push Docker Image: Build e publica a base de dados e o servidor para o dockerhub
+
+## Postman Collection
+Está disponível uma coleção do postman com a API do serviço. É preciso ter em atenção que poderá ser necessário mudar a porta.
+
+## K8S
+A pasta K8S contém os ficheiros para correr a aplicação com o minikube.
