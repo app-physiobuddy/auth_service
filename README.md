@@ -15,6 +15,7 @@ Todo o que escreverem é automagicamente passado para o container.
 A base de dados é iniciada automaticamente com uma table users (caso nao exista) e cria um volume gerido pelo docker;
 A BD persiste localmente, se quiserem reiniciar a BD é só apagar o volume do docker.
 
+<<<<<<< HEAD
 ## Actions
 Estão definidas duas actions:
 1. Testes: no pull e push
@@ -25,3 +26,6 @@ Está disponível uma coleção do postman com a API do serviço. É preciso ter
 
 ## K8S
 A pasta K8S contém os ficheiros para correr a aplicação com o minikube.
+=======
+.
+>>>>>>> 59e74ded9dedab98163fee7a33945de1792db212
