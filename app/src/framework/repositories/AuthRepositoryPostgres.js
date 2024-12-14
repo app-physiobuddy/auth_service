@@ -1,6 +1,6 @@
 
-const enforceContract = require("../../utilities/enforceContract");
-const AuthGateway = require("../../adapters/AuthGateway");
+const enforceContract = require("../../adapters/helpers/enforceContract");
+const DbGatewayContract = require("../../adapters/DbGatewayContract");
 const ErrorTypes = require("../../utilities/errors/ErrorTypes");
 const { Pool } = require('pg');
 require('dotenv').config();
@@ -17,7 +17,6 @@ class PostgresDatabase {
 
   }
 
-
   async query(sql, params) {
     return await this.pool.query(sql, params);
   }
@@ -26,20 +25,21 @@ class PostgresDatabase {
 
 const database = new PostgresDatabase();
 
-  class AuthRepositoryPostgres extends AuthGateway  {
+  class AuthRepositoryPostgres extends DbGatewayContract  {
     constructor() {
       super()
       this.database = database;
       
       // Utility function to enforce AuthGateway contract. 
       //Dá erro se os metodos forem diferentes de AuthGateway
-      enforceContract(this, AuthGateway);
+      enforceContract(this, DbGatewayContract);
 
     }
     async save(User, salt) {
       if (!this.database) {
         throw ErrorTypes.DatabaseError('DB connection is not initialized');
       }
+
       const result = await this.database.query(
           'INSERT INTO users (email, name, password, role, salt) VALUES ($1, $2, $3, $4, $5)',
           [User.email, User.name, User.password, User.role, salt]
@@ -64,14 +64,31 @@ const database = new PostgresDatabase();
       return true
     }
 
-    async updateUserName(User) {
+    async updateUser(newUserData, currentEmail) {
       if (!this.database) {
         throw ErrorTypes.DatabaseError('DB connection is not initialized');
       }
-      const result = await this.database.query(
-        'UPDATE users SET name = $1 WHERE email = $2',
-        [User.name, User.email]
-      )
+      console.log(newUserData)
+      let result;
+      if (newUserData.name && newUserData.email) {
+        result = await this.database.query(
+          'UPDATE users SET name = $1, email = $2 WHERE email = $3',
+          [newUserData.name, newUserData.email, currentEmail]
+        )
+      }
+      if (newUserData.name && !newUserData.email) {
+        result = await this.database.query(
+          'UPDATE users SET name = $1 WHERE email = $2',
+          [newUserData.name, currentEmail]
+        )
+      }
+      if (!newUserData.name && newUserData.email) {
+        result = await this.database.query(
+          'UPDATE users SET email = $1 WHERE email = $2',
+          [newUserData.email, currentEmail]
+        )
+      }
+     
       if (result.rowCount === 0) {
         throw ErrorTypes.DatabaseError('Error updating user');
       }
@@ -90,7 +107,7 @@ const database = new PostgresDatabase();
       return result.rows[0]; 
     }
 
-    async readAll() {
+    async getAll() {
       if (!this.database) {
         throw ErrorTypes.DatabaseError('DB connection is not initialized');
       }
@@ -100,7 +117,42 @@ const database = new PostgresDatabase();
       }
       return result.rows;
     }
- 
+    
+    // Operations on users_recovery table
+    async findByUserId(userId) {
+      if (!this.database) {
+        throw ErrorTypes.DatabaseError('DB connection is not initialized');
+      }
+      const result = await this.database.query('SELECT * FROM users WHERE id = $1', [userId]);
+      if (result.rowCount === 0) {
+        return false
+      }
+      return result.rows[0];
+    }
+
+    async updateRecoveryPasswordToken(User, salt) {
+      if (!this.database) {
+        throw ErrorTypes.DatabaseError('DB connection is not initialized');
+      }
+
+      const result = await this.database.query(
+        `UPDATE users
+        SET reset_password_token = $1,
+            recoverySalt = $2,
+            reset_password_token_created_at = NOW(),
+            reset_password_token_expires_at = NOW() + INTERVAL '10 minutes'
+        WHERE email = $3
+        RETURNING *;
+       `,
+        [User.resetPasswordToken, salt, User.email]
+    );
+
+      
+      if (result.rowCount === 0) {
+        throw ErrorTypes.DatabaseError('Error updating recovery token');
+      }
+      return true
+    }
  
   }
 

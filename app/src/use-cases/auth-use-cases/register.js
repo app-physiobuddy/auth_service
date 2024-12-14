@@ -3,8 +3,10 @@ const {User} = require("../../entities/User");
 const ErrorTypes = require("../../utilities/errors/ErrorTypes");
 
 const registerUseCase = (authRepository, authService) => {
+  console.log("called")
   return async (_User) => {
-       
+    console.log("called")
+    console.log(_User)
     let email = _User.email
     let newPassword = _User.password
 

@@ -1,22 +1,16 @@
 const crypto = require('crypto');
 const {V4} = require('paseto');
 const ErrorTypes = require('../../utilities/errors/ErrorTypes');
-require('dotenv').config();
 
 class AuthProvider {
     constructor(pasetoKey) {
       this.V4 = V4;
       this.pasetoKey = null;
-      this.publicKey = null
     }
 
     async initialize() {
       // Generate the key once when the provider is set up
-      //const {secretKey, publicKey} = await V4.generateKey('public', {format:"paserk"});
-      this.pasetoKey = process.env.PASETO_PRIVATE_KEY
-      this.publicKey = process.env.PASETO_PUBLIC_KEY
-      console.log(this.pasetoKey, this.publicKey)
-
+      this.pasetoKey = await V4.generateKey('public');
       
   }
 
@@ -45,14 +39,13 @@ class AuthProvider {
 
       return { hashedPassword, salt };
     }
-    
   
     // Verify password using stored salt
     verifyPassword(password, storedHash, storedSalt) {
       const hashToVerify = crypto.pbkdf2Sync(password, storedSalt, 10000, 64, 'sha512').toString('hex');
       const isValidPassword = hashToVerify === storedHash
       if(!isValidPassword) {
-        throw ErrorTypes.AuthError({
+        throw ErrorTypes.AuthProviderError({
           public: "Password does not match",
           inner: "Password does not match, it is not valid"
         })
@@ -76,14 +69,13 @@ class AuthProvider {
 
     async decodeToken(token) {
       try {
-        const payload = await this.V4.verify(token, this.publicKey);
+        const payload = await this.V4.verify(token, this.pasetoKey);
+
         return payload;
       } catch (error) {
-        // If an error occurs, throw a custom ValidationError
-        throw ErrorTypes.ValidationError({
-          public: "Invalid token",
-          inner: "AuthProvider Decode:Token is not valid"
-        });
+        console.log("ERROR ON DECODE", error)
+        return false
+
       }
     }
 }

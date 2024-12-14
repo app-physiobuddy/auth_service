@@ -1,14 +1,10 @@
 const {User} = require("../../entities/User")
-const ErrorTypes = require("../../utilities/errors/ErrorTypes")
 
 
 
 const getAllUsersUseCase = (authRepository) => {
-
   return async () => {
-    const rawUsers = await authRepository.readAll();
-
-
+    const rawUsers = await authRepository.getAll();
     const n_users = rawUsers.length
     let user_list = []
     for (let i = 0; i < n_users; i++) {

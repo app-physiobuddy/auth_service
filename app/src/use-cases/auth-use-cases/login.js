@@ -11,7 +11,8 @@ const loginUseCase = (authRepository, authService) => {
       if (!_result_user) {
         throw ErrorTypes.UnauthorizedAcess('User not found in db');
       }
-      
+      console.log("LoginUseCase", _result_user)
+
       const user = new User(_result_user.email, _result_user.name, _result_user.password, _result_user.role)
       const userSalt = _result_user.salt
 
@@ -22,12 +23,14 @@ const loginUseCase = (authRepository, authService) => {
       );
 
       const token = await authService.generateToken({
+        id:_result_user.id,
         email: user.email,
         name: user.name,
         role: user.role
       });
 
     return {
+        id:_result_user.id,
         email: user.email,
         name: user.name,
         role: user.role,

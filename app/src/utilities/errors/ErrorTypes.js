@@ -1,3 +1,4 @@
+
 class ErrorTypes {
   static ValidationError(message) {
     const error = new Error(
